@@ -19,9 +19,6 @@ newtype CharacterOutline = CharacterOutline
 data FullCharacter = FullCharacter
   { _selectedClass :: String
   , _strength      :: Int
-  , _dexterity     :: Int
-  , _constitution  :: Int
-  , _intelligence  :: Int
   } deriving (Show, Eq)
 
 data Model
@@ -30,36 +27,12 @@ data Model
   | CreatedCharacter FullCharacter
   deriving (Show, Eq)
 ----------------------------------------------------------------------------
--- class' :: Lens Model String
--- class' = lens _class $ \record field -> record { _class = field }
-
--- selectedClass :: Lens Model String
--- selectedClass = lens _selectedClass $ \record field -> record { _selectedClass = field }
-
--- strength :: Lens Model Int
--- strength = lens _strength $ \record field -> record { _strength = field }
-
--- dexterity :: Lens Model Int
--- dexterity = lens _dexterity $ \record field -> record { _dexterity = field }
-
--- constitution :: Lens Model Int
--- constitution = lens _constitution $ \record field -> record { _constitution = field }
-
--- intelligence :: Lens Model Int
--- intelligence = lens _intelligence $ \record field -> record { _intelligence = field }
-----------------------------------------------------------------------------
 -- | Sum type for App events
 data Action
   = SetClass String
   | ConfirmClass
   | IncrementStrength
   | DecrementStrength
-  | IncrementDexterity
-  | DecrementDexterity
-  | IncrementConstitution
-  | DecrementConstitution
-  | IncrementIntelligence
-  | DecrementIntelligence
   | FinalizeCharacter
   deriving (Show, Eq)
 ----------------------------------------------------------------------------
@@ -89,9 +62,6 @@ updateModel = \case
   ConfirmClass          -> modify $ \case
     NewCharacter char -> CharacterInCreation (FullCharacter { _selectedClass = _class char
                                                             , _strength      = 5
-                                                            , _dexterity     = 5
-                                                            , _constitution  = 5
-                                                            , _intelligence  = 5
                                                             })
     x                 -> x
   IncrementStrength     -> modify $ \case
@@ -100,24 +70,6 @@ updateModel = \case
   DecrementStrength     -> modify $ \case
     CharacterInCreation char -> CharacterInCreation (char { _strength = _strength char - 1 })
     x                        -> x
-  IncrementDexterity    -> modify $ \case
-    CharacterInCreation char -> CharacterInCreation (char { _dexterity = _dexterity char + 1 })
-    x                        -> x
-  DecrementDexterity    -> modify $ \case
-    CharacterInCreation char -> CharacterInCreation (char { _dexterity = _dexterity char - 1 })
-    x                        -> x
-  IncrementConstitution -> modify $ \case
-    CharacterInCreation char -> CharacterInCreation (char { _constitution = _constitution char + 1 })
-    x                        -> x
-  DecrementConstitution -> modify $ \case
-    CharacterInCreation char -> CharacterInCreation (char { _constitution = _constitution char - 1 })
-    x                        -> x
-  IncrementIntelligence -> modify $ \case
-    CharacterInCreation char -> CharacterInCreation (char { _intelligence = _intelligence char + 1 })
-    x                        -> x
-  DecrementIntelligence -> modify $ \case
-    CharacterInCreation char -> CharacterInCreation (char { _intelligence = _intelligence char - 1 })
-    x                        -> x
   FinalizeCharacter     -> modify $ \case
     CharacterInCreation char -> CreatedCharacter char
     x                        -> x
@@ -125,9 +77,6 @@ updateModel = \case
 -- | List of character attributes with their accessors and actions
 attributes :: [(String, FullCharacter -> Int, Action, Action)]
 attributes = [ ("Strength", _strength, IncrementStrength, DecrementStrength)
-             , ("Dexterity", _dexterity, IncrementDexterity, DecrementDexterity)
-             , ("Constitution", _constitution, IncrementConstitution, DecrementConstitution)
-             , ("Intelligence", _intelligence, IncrementIntelligence, DecrementIntelligence)
              ]
 
 -- | Constructs a virtual DOM from a model
