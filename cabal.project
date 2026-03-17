@@ -1,5 +1,5 @@
 packages:
   .
-  static-guarantees-sample-app/
-  static-guarantees-sample-app-2/
-  static-guarantees-sample-app-http/
+  static-guarantees-examples/base/
+  static-guarantees-examples/base-alt/
+  static-guarantees-examples/http/
