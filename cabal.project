@@ -2,4 +2,5 @@ packages:
   .
   static-guarantees-examples/base/
   static-guarantees-examples/base-alt/
+  static-guarantees-examples/edge-update-tabs/
   static-guarantees-examples/http/
